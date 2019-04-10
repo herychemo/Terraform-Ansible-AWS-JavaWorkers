@@ -1,7 +1,8 @@
 
 resource "aws_network_interface" "web-ni" {
-  subnet_id = "${element(aws_subnet.subnets.*.id, 0)}"
-  private_ips = ["192.168.0.100"]
+  subnet_id = "${var.subnet_id}"
+
+  private_ips = [ "${var.instance_private_ip}" ]
 
   tags = {
     Name = "primary_network_interface"
@@ -11,10 +12,10 @@ resource "aws_network_interface" "web-ni" {
 
 resource "aws_instance" "web-ec2s" {
 
-  availability_zone = "${element(data.aws_availability_zones.azs.names, 0)}"
+  availability_zone = "${var.availability_zone}"
 
-  ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.micro"
+  ami           = "${var.instance_aws_ami}"
+  instance_type = "${var.instance_type}"
 
   network_interface {
     network_interface_id = "${aws_network_interface.web-ni.id}"
@@ -22,7 +23,7 @@ resource "aws_instance" "web-ec2s" {
   }
 
   tags = {
-    Name = "HelloWorld EC2 Instance"
+    Name = "HelloWorld-EC2-Instance"
     CreatedByTool = "Terraform"
   }
 }
