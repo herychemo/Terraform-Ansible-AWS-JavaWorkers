@@ -8,7 +8,7 @@ resource "aws_vpc" "main_vpc" {
   enable_dns_hostnames = "${var.enable_dns_hostnames}"
 
   tags = {
-    Name = "Main-Vpc"
+    Name = "${var.vpc_name}-Vpc"
     CreatedByTool = "Terraform"
   }
 }
@@ -17,10 +17,18 @@ resource "aws_internet_gateway" "gw" {
   vpc_id = "${aws_vpc.main_vpc.id}"
 
   tags {
-    Name = "Main-Internet-GW"
+    Name = "${var.vpc_name}-Internet-GW"
     CreatedByTool = "Terraform"
   }
 }
+
+
+resource "aws_route" "internet_default_route" {
+  route_table_id         = "${aws_vpc.main_vpc.default_route_table_id}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = "${aws_internet_gateway.gw.id}"
+}
+
 
 resource "aws_subnet" "subnets" {
 
@@ -37,10 +45,12 @@ resource "aws_subnet" "subnets" {
   depends_on = ["aws_internet_gateway.gw"]
 
   tags = {
-    Name = "Subnet-${count.index}"
+    Name = "${var.vpc_name}-Subnet-${count.index}"
     CreatedByTool = "Terraform"
   }
 }
+
+
 
 output "vpc_id" {
   value = "${aws_vpc.main_vpc.id}"

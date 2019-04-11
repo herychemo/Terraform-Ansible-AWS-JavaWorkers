@@ -1,10 +1,9 @@
 
 # Network variables
 
-variable "avz_names" {
-  type = "list"
+variable "vpc_name" {
+  default = "Main"
 }
-
 
 variable "vpc_cidr" {
   default = "192.168.0.0/16"
@@ -23,6 +22,10 @@ variable "enable_dns_hostnames" {
   default = true
 }
 
+
+variable "avz_names" {
+  type = "list"
+}
 
 variable "subnet_number_template" {
   default = "SUBNET_NUMBER"

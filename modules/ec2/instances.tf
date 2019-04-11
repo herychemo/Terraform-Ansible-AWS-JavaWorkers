@@ -38,3 +38,7 @@ resource "aws_instance" "ec2-instance" {
   }
 }
 
+
+output "instance_eip_public_ip" {
+  value = "${aws_eip.instance_eips.*.public_ip}"
+}

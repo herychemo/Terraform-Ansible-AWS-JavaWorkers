@@ -12,6 +12,9 @@ variable "region" {
   default = "us-east-1"
 }
 
+variable "main_vpc_name" {
+  default = "Main"
+}
 
 variable "main_instance_ssh_key_name" {
   default = "tf_main"
