@@ -11,14 +11,31 @@ module "my_vpc" {
   avz_names = "${data.aws_availability_zones.azs.names}"
 }
 
+module "main_key_pair" {
+  source = "../modules/key_pair"
+
+  ssh-key-name = "${var.main_instance_ssh_key_name}"
+  ssh-public-key = "${file(var.main_instance_ssh_public_key_path)}"
+}
+
+module "open_security_group" {
+  source = "../modules/security_group"
+  group_name = "OpenSecurityGroup"
+  group_description = "Allow All traffic"
+  vpc_id = "${module.my_vpc.vpc_id}"
+}
+
 module "my_instance" {
   source = "../modules/ec2"
 
   availability_zone = "${element(data.aws_availability_zones.azs.names, 0)}"
-  instance_private_ip = "192.168.0.100"
-
   subnet_id = "${element(module.my_vpc.vpc_subnets_ids, 0)}"
+  instance_private_ip = "${var.main_instance_private_ip}"
+  add_public_ip = "${var.main_instance_add_public_ip}"
 
   instance_aws_ami = "${data.aws_ami.ubuntu.id}"
-}
 
+  key_pair_name = "${module.main_key_pair.ssh_key_name}"
+
+  vpc_security_group_id = "${module.open_security_group.security_group_id}"
+}

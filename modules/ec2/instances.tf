@@ -1,29 +1,39 @@
 
-resource "aws_network_interface" "web-ni" {
-  subnet_id = "${var.subnet_id}"
+resource "aws_eip" "instance_eips" {
 
-  private_ips = [ "${var.instance_private_ip}" ]
+  count = "${var.add_public_ip}"
 
-  tags = {
-    Name = "primary_network_interface"
+  vpc = true
+
+  instance = "${aws_instance.ec2-instance.id}"
+  associate_with_private_ip = "${var.instance_private_ip}"
+
+  tags {
+    Name = "${var.instance_name}_EIP"
     CreatedByTool = "Terraform"
   }
+
+  depends_on = ["aws_instance.ec2-instance"]
 }
 
-resource "aws_instance" "web-ec2s" {
+resource "aws_instance" "ec2-instance" {
 
   availability_zone = "${var.availability_zone}"
 
   ami           = "${var.instance_aws_ami}"
   instance_type = "${var.instance_type}"
 
-  network_interface {
-    network_interface_id = "${aws_network_interface.web-ni.id}"
-    device_index         = 0
-  }
+  key_name = "${var.key_pair_name}"
+
+  associate_public_ip_address = "${var.add_public_ip}"
+
+  subnet_id = "${var.subnet_id}"
+  private_ip = "${var.instance_private_ip}"
+
+  vpc_security_group_ids = ["${var.vpc_security_group_id}"]
 
   tags = {
-    Name = "HelloWorld-EC2-Instance"
+    Name = "${var.instance_name}"
     CreatedByTool = "Terraform"
   }
 }
