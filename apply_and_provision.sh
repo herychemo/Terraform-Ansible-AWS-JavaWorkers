@@ -11,27 +11,31 @@ OLD_WD=$PWD
 
 cd $ENV
 
+
 echo "Performing Terraform Apply"
 
+# Make sure terraform is initialized
 terraform init
+
+# Perform Terraform apply operation twice in order to make sure EIP is updated in TfState File
+terraform apply -auto-approve
 terraform apply -auto-approve
 
 
-echo "starting provisioning"
+echo "Starting Provisioning"
 
 set -e
 if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
-    WSL_MSG=$(cat <<-END
-    	If you're running inside WSL bash, make sure to mount fs using metadata option
-	
-	you can just add the contents of file ./scripts/wsl.conf into /etc/wsl.conf 
-	
-	This will enable using chmod command into ssh keys.
+    WSL_MSG=$(cat << END
+If you're running inside WSL bash, make sure to mount fs using metadata option
+you can just add the contents of file ./scripts/wsl.conf into /etc/wsl.conf
+This will enable using chmod command into ssh keys.
 
 END
     )
-    echo $WSL_MSG;
+    echo "${WSL_MSG}\n";
 fi
+
 
 chmod 700 -R ../ssh_keys
 
@@ -54,4 +58,3 @@ cd $OLD_WD
 
 echo "Done!"
 exit 0
-

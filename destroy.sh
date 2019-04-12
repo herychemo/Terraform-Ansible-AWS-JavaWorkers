@@ -12,6 +12,11 @@ OLD_WD=$PWD
 cd $ENV
 
 echo "destroying..."
+
+# Make sure terraform is initialized
+terraform init
+
+# Destroy all resources created by terraform
 terraform destroy -auto-approve
 
 if [[ -f ../scripts/terraform.tfstate ]]; then
@@ -24,4 +29,3 @@ cd $OLD_WD
 
 echo "Done!"
 exit 0
-
