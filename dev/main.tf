@@ -42,5 +42,5 @@ module "main_instance" {
 }
 
 output "main_instance_public_ip" {
-  value = "${module.main_instance.instance_eip_public_ip}"
+  value = "${module.main_instance.instance_public_ip}"
 }

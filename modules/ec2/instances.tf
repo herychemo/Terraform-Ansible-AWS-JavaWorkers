@@ -1,4 +1,8 @@
 
+/*
+// By terraform open issue EIP isn't sync with instance public ip in tfstate
+// Will activate after fix.
+
 resource "aws_eip" "instance_eips" {
 
   count = "${var.add_public_ip}"
@@ -14,7 +18,7 @@ resource "aws_eip" "instance_eips" {
   }
 
   depends_on = ["aws_instance.ec2-instance"]
-}
+}*/
 
 resource "aws_instance" "ec2-instance" {
 
@@ -39,6 +43,11 @@ resource "aws_instance" "ec2-instance" {
 }
 
 
-output "instance_eip_public_ip" {
+/*output "instance_eip_public_ip" {
   value = "${aws_eip.instance_eips.*.public_ip}"
+}
+*/
+
+output "instance_public_ip" {
+  value = "${aws_instance.ec2-instance.public_ip}"
 }
