@@ -1,0 +1,12 @@
+---
+- hosts: all
+  vars:
+    some_var: 2
+  remote_user: ubuntu
+  tasks:
+    - name: Test Connection with Ping.
+      ping:
+    - name: Perform apt update.
+      become: yes
+      apt:
+        update_cache:
