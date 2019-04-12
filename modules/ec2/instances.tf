@@ -2,22 +2,24 @@
 
 resource "aws_eip" "instance_eips" {
 
-  count = "${var.add_public_ip}"
+  count = "${var.add_public_ip * var.n_of_instances}"
 
   vpc = true
 
-  instance = "${aws_instance.ec2-instance.id}"
-  associate_with_private_ip = "${var.instance_private_ip}"
+  instance = "${element(aws_instance.ec2-instances.*.id, count.index)}"
+  associate_with_private_ip = "${element(aws_instance.ec2-instances.*.private_ip, count.index)}"
 
   tags {
-    Name = "${var.instance_name}_EIP"
+    Name = "EIP-${var.instance_name}-${count.index}"
     CreatedByTool = "Terraform"
   }
 
-  depends_on = ["aws_instance.ec2-instance"]
+  depends_on = ["aws_instance.ec2-instances"]
 }
 
-resource "aws_instance" "ec2-instance" {
+resource "aws_instance" "ec2-instances" {
+
+  count = "${var.n_of_instances}"
 
   availability_zone = "${var.availability_zone}"
 
@@ -29,23 +31,17 @@ resource "aws_instance" "ec2-instance" {
   associate_public_ip_address = "${var.add_public_ip}"
 
   subnet_id = "${var.subnet_id}"
-  private_ip = "${var.instance_private_ip}"
+  private_ip = "${cidrhost(var.subnet_cidr_block, var.instance_host_n_in_subnet_cidr + count.index)}"
 
   vpc_security_group_ids = ["${var.vpc_security_group_id}"]
 
   tags = {
-    Name = "${var.instance_name}"
+    Name = "${var.instance_name}-${count.index}"
     CreatedByTool = "Terraform"
   }
 }
 
 
-output "instance_public_ip" {
+output "instance_public_ips" {
   value = "${aws_eip.instance_eips.*.public_ip}"
 }
-
-/*
-output "instance_public_ip" {
-  value = "${aws_instance.ec2-instance.public_ip}"
-}
-*/

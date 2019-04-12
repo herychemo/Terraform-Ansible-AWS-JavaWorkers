@@ -31,8 +31,13 @@ module "main_instance" {
 
   availability_zone = "${element(data.aws_availability_zones.azs.names, 0)}"
   subnet_id = "${element(module.main_vpc.vpc_subnets_ids, 0)}"
-  instance_private_ip = "${var.main_instance_private_ip}"
+  subnet_cidr_block = "${element(module.main_vpc.vpc_subnets_cidrs, 0)}"
+
   add_public_ip = "${var.main_instance_add_public_ip}"
+
+  instance_name = "${var.main_instances_name}"
+  instance_host_n_in_subnet_cidr = "${var.main_instances_host_n_in_subnet_cidr}"
+  n_of_instances = "${var.main_instances_n_of_instances}"
 
   instance_aws_ami = "${data.aws_ami.ubuntu.id}"
 
@@ -41,6 +46,6 @@ module "main_instance" {
   vpc_security_group_id = "${module.open_security_group.security_group_id}"
 }
 
-output "main_instance_public_ip" {
-  value = "${module.main_instance.instance_public_ip}"
+output "main_instances_public_ips" {
+  value = "${module.main_instance.instance_public_ips}"
 }

@@ -60,3 +60,7 @@ output "vpc_subnets_ids" {
   value = "${aws_subnet.subnets.*.id}"
 }
 
+output "vpc_subnets_cidrs" {
+  value = "${aws_subnet.subnets.*.cidr_block}"
+}
+

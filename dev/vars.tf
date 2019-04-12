@@ -24,8 +24,16 @@ variable "main_instance_ssh_public_key_path" {
   default = "../ssh_keys/tf_main/tf_main.pub"
 }
 
-variable "main_instance_private_ip" {
-  default = "192.168.0.100"
+variable "main_instances_name" {
+  default = "Main"
+}
+
+variable "main_instances_host_n_in_subnet_cidr" {
+  default = 100
+}
+
+variable "main_instances_n_of_instances" {
+  default = 2
 }
 
 variable "main_instance_add_public_ip" {
