@@ -10,3 +10,6 @@
       become: yes
       apt:
         update_cache:
+    - name: Installing Java8
+      include_role:
+        name: java8-oracle

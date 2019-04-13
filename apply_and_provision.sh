@@ -48,7 +48,7 @@ cp terraform.tfstate ../scripts/
 ../scripts/dynamic_inventory.sh --hostfile
 
 export ANSIBLE_HOST_KEY_CHECKING=False
-ansible-playbook -i ../scripts/dynamic_inventory.sh --private-key ../ssh_keys/tf_main/tf_main ../playbooks/java_server.yml  || echo "\nIt's seems that something went wrong..."
+ansible-playbook -i ../scripts/dynamic_inventory.sh --private-key ../ssh_keys/tf_main/tf_main ../ansible/playbook.yml  || echo "\nIt's seems that something went wrong..."
 
 rm ../scripts/terraform.tfstate 
 
