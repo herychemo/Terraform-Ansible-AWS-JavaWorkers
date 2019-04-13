@@ -11,8 +11,7 @@ OLD_WD=$PWD
 
 cd $ENV
 
-
-echo "Performing Terraform Apply"
+echo && echo "Performing Terraform Apply"
 
 # Make sure terraform is initialized
 terraform init
@@ -22,7 +21,17 @@ terraform apply -auto-approve
 terraform apply -auto-approve
 
 
-echo "Starting Provisioning"
+echo && echo "Adding SSH Keys to Known Hosts"
+
+MAIN_INSTANCES_IPS=`terraform output main_instances_public_ips`
+MAIN_INSTANCES_IPS=`echo $MAIN_INSTANCES_IPS | sed 's/,//g'`
+for IP in $MAIN_INSTANCES_IPS; do
+    ssh-keygen -R $IP
+    ssh-keyscan -H $IP >> ~/.ssh/known_hosts
+done
+
+
+echo && echo "Starting Provisioning"
 
 set -e
 if grep -qE "(Microsoft|WSL)" /proc/version &> /dev/null ; then
@@ -33,9 +42,8 @@ This will enable using chmod command into ssh keys.
 
 END
     )
-    echo "${WSL_MSG}\n";
+    echo "${WSL_MSG}" && echo
 fi
-
 
 chmod 700 -R ../ssh_keys
 
@@ -45,20 +53,21 @@ fi
 
 cp terraform.tfstate ../scripts/
 
-../scripts/dynamic_inventory.sh --hostfile
+bash ../scripts/dynamic_inventory.sh --hostfile
 
-export ANSIBLE_HOST_KEY_CHECKING=False
+#If you can't add hosts to known hosts file, uncomment next line.
+#export ANSIBLE_HOST_KEY_CHECKING=False
 ansible-playbook -i ../scripts/dynamic_inventory.sh --private-key ../ssh_keys/tf_main/tf_main ../ansible/playbook.yml  || echo "\nIt's seems that something went wrong..."
 
 rm ../scripts/terraform.tfstate 
 
 
-echo "Terraform Outputs:"
+echo && echo "Terraform Outputs:"
 terraform output -json
 
 
 
 cd $OLD_WD
 
-echo "Done!"
+echo && echo "Done!"
 exit 0
