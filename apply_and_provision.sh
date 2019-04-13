@@ -53,6 +53,10 @@ ansible-playbook -i ../scripts/dynamic_inventory.sh --private-key ../ssh_keys/tf
 rm ../scripts/terraform.tfstate 
 
 
+echo "Terraform Outputs:"
+terraform output -json
+
+
 
 cd $OLD_WD
 
