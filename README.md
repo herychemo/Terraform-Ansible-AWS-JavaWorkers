@@ -1,5 +1,5 @@
-# TerraformLabsJenkins
-Small Terraform Lab for practicing Jenkins
+# Terraform-Ansible-AWS-JavaWorkers
+Small project for testing terraform and Ansible.
 
 ### How to test
 
