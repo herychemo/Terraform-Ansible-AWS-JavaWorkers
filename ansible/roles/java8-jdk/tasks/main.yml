@@ -1,0 +1,25 @@
+# https://docs.ansible.com/ansible/latest/user_guide/playbooks_reuse_roles.html
+---
+- name: Install Software Properties Common
+  become: yes
+  apt: name=software-properties-common state=latest
+
+- name: Add OpenJDK Repository
+  become: yes
+  apt_repository: repo='ppa:openjdk-r/ppa'
+
+- name: Apt Update
+  become: yes
+  apt:
+    update_cache:
+
+- name: Install Java openjdk8 and openjre8
+  become: yes
+  apt:
+    name:
+      - openjdk-8-jdk
+      - openjdk-8-jre
+    state: latest
+
+- name: Verify JDK Installation
+  shell: java -version && javac -version
