@@ -42,6 +42,7 @@ module "main_instance" {
   instance_aws_ami = "${data.aws_ami.ubuntu.id}"
 
   key_pair_name = "${module.main_key_pair.ssh_key_name}"
+  ssh-private-key = "${file(var.main_instance_ssh_private_key_path)}"
 
   vpc_security_group_id = "${module.open_security_group.security_group_id}"
 }

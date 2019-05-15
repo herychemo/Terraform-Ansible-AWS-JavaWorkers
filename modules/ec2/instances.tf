@@ -35,6 +35,16 @@ resource "aws_instance" "ec2-instances" {
 
   vpc_security_group_ids = ["${var.vpc_security_group_id}"]
 
+  provisioner "remote-exec" {
+    inline = ["sudo apt install python -y"]
+
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      private_key = "${var.ssh-private-key}"
+    }
+  }
+
   tags = {
     Name = "${var.instance_name}-${count.index}"
     CreatedByTool = "Terraform"

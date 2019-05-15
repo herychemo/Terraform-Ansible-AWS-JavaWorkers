@@ -24,9 +24,8 @@ variable "instance_name" {
   default = "HelloWorldInstance"
 }
 
-variable "key_pair_name" {
-  default = ""
-}
+variable "ssh-private-key" {}
+variable "key_pair_name" {}
 
 variable "add_public_ip" {}
 
