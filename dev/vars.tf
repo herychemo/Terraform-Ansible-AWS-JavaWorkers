@@ -1,11 +1,11 @@
 
 // AWS Access
 variable "access_key" {
-  default = "AKIA25HSOJRJDBUC77GD"
+  default = "XXXXXXXXXXXXXXXXXXXX"
 }
 
 variable "secret_key" {
-  default = "r4N7jc/LOf1NNmn1REvfQphVsH3WWCoa0mYf4t9A"
+  default = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 }
 
 variable "region" {
