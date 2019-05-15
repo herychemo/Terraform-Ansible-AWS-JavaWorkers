@@ -1,0 +1,30 @@
+---
+- name: Create Worker User
+  become: yes
+  user:
+    name: worker
+    comment: Worker User For Application.
+    create_home: yes
+    home: /opt/worker
+    shell: /bin/bash
+    state: present
+    groups: sudo
+    append: yes
+
+- name: Adding sudores config
+  become: yes
+  copy:
+    dest: "/etc/sudoers.d/98-worker-init-user"
+    owner: root
+    group: root
+    mode: 0440
+    content: |
+      # User rules for ubuntu
+      worker ALL=(ALL) NOPASSWD:ALL
+
+- name: Adding ssh key to autorized keys
+  become: yes
+  authorized_key:
+    user: worker
+    state: present
+    key: "{{ lookup('file', '../ssh_keys/tf_main/tf_main.pub') }}"

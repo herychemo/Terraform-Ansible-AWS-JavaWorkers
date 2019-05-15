@@ -13,3 +13,6 @@
     - name: Installing Java8
       include_role:
         name: java8-jdk
+    - name: Configure User
+      include_role:
+        name: worker-user
