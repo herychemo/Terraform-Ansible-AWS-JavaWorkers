@@ -44,7 +44,7 @@ module "main_instance" {
   key_pair_name = "${module.main_key_pair.ssh_key_name}"
   ssh-private-key = "${file(var.main_instance_ssh_private_key_path)}"
 
-  vpc_security_group_id = "${module.open_security_group.security_group_id}"
+  vpc_security_group_ids = "${list(module.open_security_group.security_group_id)}"
 }
 
 output "main_instances_public_ips" {

@@ -33,7 +33,7 @@ resource "aws_instance" "ec2-instances" {
   subnet_id = "${var.subnet_id}"
   private_ip = "${cidrhost(var.subnet_cidr_block, var.instance_host_n_in_subnet_cidr + count.index)}"
 
-  vpc_security_group_ids = ["${var.vpc_security_group_id}"]
+  vpc_security_group_ids = ["${var.vpc_security_group_ids}"]
 
   provisioner "remote-exec" {
     inline = ["sudo apt install python -y"]
