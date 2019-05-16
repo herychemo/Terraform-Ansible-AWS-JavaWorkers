@@ -55,3 +55,7 @@ resource "aws_instance" "ec2-instances" {
 output "instance_public_ips" {
   value = "${aws_eip.instance_eips.*.public_ip}"
 }
+
+output "instance_ids" {
+  value = "${aws_instance.ec2-instances.*.id}"
+}

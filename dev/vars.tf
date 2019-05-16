@@ -46,3 +46,11 @@ variable "main_instance_add_public_ip" {
   default = true
 }
 
+
+variable "main_load_balancer_name" {
+  default = "Main-Load-Balancer"
+}
+
+variable "main_lb_health_check_pattern" {
+  default = "HTTP:5000/actuator/health"
+}

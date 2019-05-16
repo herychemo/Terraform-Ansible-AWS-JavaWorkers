@@ -47,6 +47,24 @@ module "main_instance" {
   vpc_security_group_ids = "${list(module.open_security_group.security_group_id)}"
 }
 
+
+module "main_load_balancer" {
+  source = "../modules/load_balancer"
+
+  load_balancer_name = "${var.main_load_balancer_name}"
+  instance_ids = "${module.main_instance.instance_ids}"
+  health_check_pattern = "${var.main_lb_health_check_pattern}"
+
+  vpc_security_group_ids = "${list(module.open_security_group.security_group_id)}"
+  subnet_ids = "${list(element(module.main_vpc.vpc_subnets_ids, 0), element(module.main_vpc.vpc_subnets_ids, 1))}"
+
+}
+
+
 output "main_instances_public_ips" {
   value = "${module.main_instance.instance_public_ips}"
+}
+
+output "main_load_balancer_dns" {
+  value = "${module.main_load_balancer.public_access}"
 }

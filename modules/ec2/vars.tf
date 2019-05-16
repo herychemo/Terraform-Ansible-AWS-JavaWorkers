@@ -29,7 +29,6 @@ variable "key_pair_name" {}
 
 variable "add_public_ip" {}
 
-# Comma separated values
 variable "vpc_security_group_ids" {
   type = "list"
   default = []
