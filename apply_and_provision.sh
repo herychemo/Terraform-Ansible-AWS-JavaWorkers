@@ -48,6 +48,7 @@ fi
 chmod 700 -R ../ssh_keys
 
 
+rm -f temp_inventory
 terraform output main_instances_public_ips | sed 's/,//g' >> temp_inventory
 
 echo "On hosts:"
@@ -61,7 +62,7 @@ ansible-playbook -i temp_inventory \
         || echo "\nIt's seems that something went wrong..."
 
 
-rm temp_inventory
+rm -f temp_inventory
 
 
 echo && echo "Terraform Outputs:"
