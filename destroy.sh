@@ -19,11 +19,6 @@ terraform init
 # Destroy all resources created by terraform
 terraform destroy -auto-approve
 
-if [[ -f ../scripts/terraform.tfstate ]]; then
-    rm ../scripts/terraform.tfstate 
-fi
-
-
 
 cd $OLD_WD
 

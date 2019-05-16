@@ -47,23 +47,21 @@ fi
 
 chmod 700 -R ../ssh_keys
 
-if [[ -f ../scripts/terraform.tfstate ]]; then
-    rm ../scripts/terraform.tfstate 
-fi
 
-cp terraform.tfstate ../scripts/
+terraform output main_instances_public_ips | sed 's/,//g' >> temp_inventory
 
-bash ../scripts/dynamic_inventory.sh --hostfile
+echo "On hosts:"
+cat temp_inventory && echo
 
 #If you can't add hosts to known hosts file, uncomment next line.
 #export ANSIBLE_HOST_KEY_CHECKING=False
-ansible-playbook -i ../scripts/dynamic_inventory.sh \
+ansible-playbook -i temp_inventory \
     --private-key ../ssh_keys/tf_main/tf_main \
     ../ansible/playbook.yml \
         || echo "\nIt's seems that something went wrong..."
 
 
-rm ../scripts/terraform.tfstate 
+rm temp_inventory
 
 
 echo && echo "Terraform Outputs:"
