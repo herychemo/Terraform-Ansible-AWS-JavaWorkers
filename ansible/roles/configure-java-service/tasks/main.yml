@@ -1,5 +1,5 @@
 ---
-- name: Copy new Jar to server.
+- name: Configuring Systemd Service
   become: yes
   copy:
     src: '../ansible/config/worker-app.service'
@@ -7,3 +7,12 @@
     owner: worker
     group: worker
     mode: 0644
+
+- name: Creating service logging directory
+  become: yes
+  file:
+    path: /var/opt/worker/logs
+    state: directory
+    owner: worker
+    group: worker
+    mode: 0775
