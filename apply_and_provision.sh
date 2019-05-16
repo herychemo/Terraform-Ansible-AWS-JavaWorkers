@@ -31,6 +31,17 @@ for IP in $MAIN_INSTANCES_IPS; do
 done
 
 
+echo && echo "Package App"
+
+cd "${OLD_WD}/worker-app/"
+mvn compile package -DskipTests
+cd target
+APP_D=$PWD
+cd $OLD_WD
+rm -f worker-app.jar
+cp $APP_D/*.jar worker-app.jar
+cd $ENV
+
 echo && echo "Starting Provisioning"
 
 set -e
@@ -62,7 +73,10 @@ ansible-playbook -i temp_inventory \
         || echo "\nIt's seems that something went wrong..."
 
 
+# Clean up
 rm -f temp_inventory
+
+rm -f ../worker-app.jar
 
 
 echo && echo "Terraform Outputs:"

@@ -1,0 +1,34 @@
+---
+- name: Stop running app
+  become: yes
+  service:
+    name: worker-app
+    state: stopped
+
+- name: Remove old app version.
+  become: yes
+  become_user: worker
+  file:
+    path: ~/worker-app.jar
+    state: absent
+
+- name: Copy new Jar to server.
+  become: yes
+  become_user: worker
+  copy:
+    src: ../worker-app.jar
+    dest: ~/worker-app.jar
+
+- name: Make App executable.
+  become: yes
+  become_user: worker
+  file:
+    path: ~/worker-app.jar
+    mode: +x
+
+- name: Start app
+  become: yes
+  service:
+    name: worker-app
+    state: started
+

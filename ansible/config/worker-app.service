@@ -1,0 +1,16 @@
+[Unit]
+Description=Worker App
+After=syslog.target
+
+[Service]
+User=worker
+WorkingDirectory=/opt/worker
+ExecStart=/opt/worker/worker-app.jar
+
+SuccessExitStatus=143
+TimeoutStopSec=10
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

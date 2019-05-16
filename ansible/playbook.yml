@@ -16,3 +16,9 @@
     - name: Configure User
       include_role:
         name: worker-user
+    - name: Configure Systemd Service
+      include_role:
+        name: configure-java-service
+    - name: Deploy Worker App
+      include_role:
+        name: deploy-java-worker

@@ -1,0 +1,9 @@
+---
+- name: Copy new Jar to server.
+  become: yes
+  copy:
+    src: '../ansible/config/worker-app.service'
+    dest: '/etc/systemd/system/worker-app.service'
+    owner: worker
+    group: worker
+    mode: 0644
